@@ -1,0 +1,27 @@
+[package]
+name = "vxwm"
+version = "0.1.0"
+edition = "2021"
+description = "Minimal experimental Wayland compositor built on Smithay (winit backend prototype)"
+
+[dependencies]
+# Structured logging. Smithay uses `tracing` internally, so we get its logs too.
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dependencies.smithay]
+version = "0.7.0"
+default-features = false
+features = [
+    # Run the compositor as a regular window inside an existing session.
+    "backend_winit",
+    # Wayland protocol server implementation (wl_compositor, xdg_shell, ...).
+    "wayland_frontend",
+    # High-level Space/Window/Output helpers used for mapping + rendering.
+    "desktop",
+]
+
+[profile.dev]
+# Compositors touch a lot of generic Smithay code; a little optimization keeps
+# debug builds responsive without hurting compile times too much.
+opt-level = 1
